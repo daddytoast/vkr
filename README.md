@@ -1,3 +1,9 @@
+https://github.com/daddytoast/vkr
+https://github.com/daddytoast/vkr
+https://github.com/daddytoast/vkr
+
+
+
 # Безопасная инфраструктура КФС на основе IaC
 
 ВКР — Разработка безопасной инфраструктуры для киберфизической системы  
