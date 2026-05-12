@@ -1,0 +1,12 @@
+---
+nextcloud_domain: "cloud.example.com"
+nextcloud_admin_user: "admin"
+nextcloud_admin_password: "changeme"
+nextcloud_db_name: "nextcloud"
+nextcloud_db_user: "nextcloud"
+nextcloud_db_password: "changeme"
+nextcloud_db_root_password: "changeme"
+nextcloud_data_dir: "/opt/nextcloud"
+nextcloud_version: "29"
+ssl_mode: "selfsigned"
+letsencrypt_email: "admin@example.com"

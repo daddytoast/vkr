@@ -1,0 +1,11 @@
+vm_name   = "nextcloud"
+vm_cores  = 2
+vm_memory = 4096
+
+# Узнать имя сетевого интерфейса хоста:
+#   Linux/Mac:  VBoxManage list bridgedifs | grep "^Name:"
+#   Windows:    VBoxManage list bridgedifs | findstr "^Name:"
+host_network_interface = "enp3s0"
+
+# Можно указать локальный .box файл вместо URL:
+# vm_image = "/path/to/ubuntu-jammy.box"

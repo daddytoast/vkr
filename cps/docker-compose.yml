@@ -1,0 +1,24 @@
+---
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cps_dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - cps_data:/data
+    environment:
+      - CPS_CONFIG=/app/config.yml
+    configs:
+      - source: cps_config
+        target: /app/config.yml
+
+configs:
+  cps_config:
+    file: ./config.yml   # copy from config.yml.example and fill in credentials
+
+volumes:
+  cps_data:

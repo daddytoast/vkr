@@ -1,0 +1,15 @@
+---
+- name: Install system dependencies
+  ansible.builtin.import_tasks: system.yml
+
+- name: Install and configure Docker
+  ansible.builtin.import_tasks: docker.yml
+
+- name: Configure firewall
+  ansible.builtin.import_tasks: firewall.yml
+
+- name: Deploy Nextcloud stack
+  ansible.builtin.import_tasks: nextcloud.yml
+
+- name: Configure SSL
+  ansible.builtin.import_tasks: ssl.yml

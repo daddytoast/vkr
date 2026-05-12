@@ -1,0 +1,21 @@
+body {
+  min-height: 100vh;
+}
+
+#count {
+  font-size: 5rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+.table th {
+  border-top: none;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+}

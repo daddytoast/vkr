@@ -1,0 +1,7 @@
+all:
+  children:
+    nextcloud:
+      hosts:
+        nextcloud-01:
+          ansible_host: 192.168.1.10   # вставить IP из: terraform output vm_ip
+          ansible_user: vagrant

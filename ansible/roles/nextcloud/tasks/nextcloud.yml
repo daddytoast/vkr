@@ -1,0 +1,50 @@
+---
+- name: Create Nextcloud data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0750"
+  loop:
+    - "{{ nextcloud_data_dir }}"
+    - "{{ nextcloud_data_dir }}/data"
+    - "{{ nextcloud_data_dir }}/db"
+    - "{{ nextcloud_data_dir }}/redis"
+    - "{{ nextcloud_data_dir }}/nginx"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ nextcloud_data_dir }}/docker-compose.yml"
+    owner: ubuntu
+    group: ubuntu
+    mode: "0640"
+  notify: Restart Nextcloud stack
+
+- name: Deploy Nginx config
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ nextcloud_data_dir }}/nginx/nginx.conf"
+    owner: ubuntu
+    group: ubuntu
+    mode: "0644"
+  notify: Reload Nginx
+
+- name: Pull Docker images
+  community.docker.docker_compose_v2_pull:
+    project_src: "{{ nextcloud_data_dir }}"
+
+- name: Start Nextcloud stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ nextcloud_data_dir }}"
+    state: present
+
+- name: Wait for Nextcloud to become ready
+  ansible.builtin.uri:
+    url: "http://localhost/status.php"
+    return_content: true
+  register: nc_status
+  until: nc_status.status == 200
+  retries: 30
+  delay: 10

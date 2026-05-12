@@ -1,0 +1,23 @@
+
+nextcloud_domain: "cloud.example.com"
+nextcloud_admin_user: "admin"
+nextcloud_admin_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  # replace with: ansible-vault encrypt_string 'your_password' --name 'nextcloud_admin_password'
+
+nextcloud_db_name: "nextcloud"
+nextcloud_db_user: "nextcloud"
+nextcloud_db_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  # replace with: ansible-vault encrypt_string 'your_db_password' --name 'nextcloud_db_password'
+
+nextcloud_db_root_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  # replace with: ansible-vault encrypt_string 'your_root_password' --name 'nextcloud_db_root_password'
+
+nextcloud_data_dir: "/opt/nextcloud"
+nextcloud_version: "29"
+
+# SSL: selfsigned | letsencrypt
+ssl_mode: "selfsigned"
+letsencrypt_email: "admin@example.com"

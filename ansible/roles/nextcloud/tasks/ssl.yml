@@ -1,0 +1,48 @@
+---
+- name: Generate self-signed certificate
+  when: ssl_mode == "selfsigned"
+  block:
+    - name: Create SSL directory
+      ansible.builtin.file:
+        path: "{{ nextcloud_data_dir }}/nginx/ssl"
+        state: directory
+        mode: "0700"
+
+    - name: Generate self-signed certificate
+      community.crypto.x509_certificate:
+        path: "{{ nextcloud_data_dir }}/nginx/ssl/cert.pem"
+        privatekey_path: "{{ nextcloud_data_dir }}/nginx/ssl/key.pem"
+        provider: selfsigned
+        selfsigned_digest: sha256
+
+    - name: Generate private key for self-signed cert
+      community.crypto.openssl_privatekey:
+        path: "{{ nextcloud_data_dir }}/nginx/ssl/key.pem"
+        size: 4096
+
+- name: Obtain Let's Encrypt certificate
+  when: ssl_mode == "letsencrypt"
+  block:
+    - name: Install certbot
+      ansible.builtin.apt:
+        name: certbot
+        state: present
+
+    - name: Obtain certificate
+      ansible.builtin.command:
+        cmd: >
+          certbot certonly --standalone
+          -d {{ nextcloud_domain }}
+          --email {{ letsencrypt_email }}
+          --agree-tos --non-interactive
+        creates: "/etc/letsencrypt/live/{{ nextcloud_domain }}/fullchain.pem"
+      notify: Restart Nextcloud stack
+
+    - name: Create symlinks to Let's Encrypt certs
+      ansible.builtin.file:
+        src: "/etc/letsencrypt/live/{{ nextcloud_domain }}/{{ item.src }}"
+        dest: "{{ nextcloud_data_dir }}/nginx/ssl/{{ item.dest }}"
+        state: link
+      loop:
+        - { src: fullchain.pem, dest: cert.pem }
+        - { src: privkey.pem,   dest: key.pem  }

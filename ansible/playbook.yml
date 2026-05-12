@@ -1,0 +1,14 @@
+---
+- name: Deploy Nextcloud
+  hosts: nextcloud
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  roles:
+    - role: nextcloud
